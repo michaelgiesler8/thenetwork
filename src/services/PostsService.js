@@ -1,10 +1,13 @@
 import { AppState } from "../AppState.js"
 import { Post } from "../models/Post.js"
+import { logger } from "../utils/Logger.js"
 import { api } from "./AxiosService.js"
+import Pop from "../utils/Pop.js"
 
 class PostsService {
-  async getPosts() {
-    const res = await api.get('api/posts')
+  async getPosts(page = '') {
+    const res = await api.get('/api/posts' + page)
+    logger.log('[GOT POSTS]', res.data)
     AppState.posts = res.data.posts.map(p => new Post(p))
     AppState.nextPage = res.data.older
     AppState.previousPage = res.data.newer
@@ -24,8 +27,11 @@ class PostsService {
 
   async likePost(postId) {
     const res = await api.post(`/api/posts/${postId}/like`)
+    const updatedPost = new Post(res.data)
     const index = AppState.posts.findIndex(p => p.id == postId)
-    AppState.posts[index] = new Post(res.data)
+    if (index !== -1) {
+      AppState.posts.splice(index, 1, updatedPost)
+    }
   }
 
   async getPostsByProfile(profileId) {
