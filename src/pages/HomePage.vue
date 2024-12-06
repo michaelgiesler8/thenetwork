@@ -5,7 +5,7 @@ import { postsService } from '../services/PostsService.js'
 import { adsService } from '../services/AdsService.js'
 import PostCard from '../components/PostCard.vue'
 import AdCard from '../components/AdCard.vue'
-import PostForm from '../components/PostForm.vue'
+import PostForm from '../components/forms/PostForm.vue'
 import Pop from '../utils/Pop.js'
 
 const account = computed(() => AppState.account)
