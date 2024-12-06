@@ -2,7 +2,11 @@
 </script>
 
 <template>
-  <div class="post-card">
+  <div class="card">
+    <div class="card-body">
+      <p>{{ post.body }}</p>
+      <small>By: {{  post.creator.name }}</small>
+    </div>
   </div>
 </template>
 
