@@ -2,23 +2,34 @@
 import { onMounted } from 'vue';
 import { postsService } from "../services/PostsService.js";
 import { adsService } from "../services/AdsService.js";
-import { AppState } from '../AppState';
+import { AppState } from '../AppState.js';
 import { computed } from 'vue';
+import Pop from '../utils/Pop.js'
 import PostCard from '../components/PostCard.vue';
 import AdCard from '../components/AdCard.vue';
 
 const posts = computed(() => AppState.posts)
 const ads = computed(() => AppState.ads)
 
-onMounted(async () => {
+async function loadPosts() {
   try {
     await postsService.getPosts()
-    await adsService.getAds()
-    console.log('Posts:', AppState.posts)
-    console.log('Ads:', AppState.ads)
   } catch (error) {
-    console.error('Error loading data:', error)
+    Pop.error(error);
   }
+}
+
+async function loadAds() {
+  try {
+    await adsService.getAds(2)
+  } catch (error) {
+    Pop.error(error)
+  }
+}
+
+onMounted(async () => {
+  await loadPosts()
+  await loadAds()
 })
 </script>
 
@@ -26,41 +37,40 @@ onMounted(async () => {
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-8">
-        <div v-if="posts.length">
-          <p>Total Posts: {{ posts.length }}</p>
-          <pre>{{  posts }}</pre>
+        <div class="posts-container">
+          <PostCard
+            v-for="post in posts"
+            :key="post.id"
+            :post="post"
+          />
         </div>
-        <p v-else>No posts found.</p>
       </div>
+      
       <div class="col-md-4">
-        <div v-if="ads.length">
-          <p>Total Ads: {{ ads.length }}</p>
-          <pre>{{ ads }}</pre>
+        <div class="ads-container">
+          <AdCard
+            v-for="ad in ads"
+            :key="ad.id"
+            :ad="ad"
+          />
         </div>
-        <p v-else>No ads found.</p>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
-.home {
-  display: grid;
-  height: 80vh;
-  place-content: center;
-  text-align: center;
-  user-select: none;
+.posts-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem
+}
 
-  .home-card {
-    width: clamp(500px, 50vw, 100%);
-
-    >img {
-      height: 200px;
-      max-width: 200px;
-      width: 100%;
-      object-fit: contain;
-      object-position: center;
-    }
-  }
+.ads-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  position: sticky;
+  top: 1rem;
 }
 </style>
