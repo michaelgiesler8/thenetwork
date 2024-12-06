@@ -1,35 +1,42 @@
 <script setup>
-import { onMounted } from 'vue';
-import { postsService } from "../services/PostsService.js";
-import { adsService } from "../services/AdsService.js";
-import { AppState } from '../AppState.js';
-import { computed } from 'vue';
+import { onMounted, ref, computed } from 'vue'
+import { AppState } from '../AppState.js'
+import { postsService } from '../services/PostsService.js'
+import { adsService } from '../services/AdsService.js'
+import PostCard from '../components/PostCard.vue'
+import AdCard from '../components/AdCard.vue'
+import PostForm from '../components/PostForm.vue'
 import Pop from '../utils/Pop.js'
-import PostCard from '../components/PostCard.vue';
-import AdCard from '../components/AdCard.vue';
 
+const account = computed(() => AppState.account)
 const posts = computed(() => AppState.posts)
 const ads = computed(() => AppState.ads)
+const nextPage = computed(() => AppState.nextPage)
+const previousPage = computed(() => AppState.previousPage)
+const isLoading = ref(false)
 
-async function loadPosts() {
+async function getPosts(url = null) {
   try {
-    await postsService.getPosts()
+    isLoading.value = true
+    await postsService.getPosts(url)
   } catch (error) {
     Pop.error(error);
+  } finally {
+    isLoading.value = false
   }
 }
 
-async function loadAds() {
+async function getAds() {
   try {
-    await adsService.getAds(2)
+    await adsService.getAds()
   } catch (error) {
     Pop.error(error)
   }
 }
 
 onMounted(async () => {
-  await loadPosts()
-  await loadAds()
+  await getPosts()
+  await getAds()
 })
 </script>
 
@@ -37,22 +44,43 @@ onMounted(async () => {
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-8">
-        <div class="posts-container">
-          <PostCard
-            v-for="post in posts"
-            :key="post.id"
-            :post="post"
-          />
+        <PostForm v-if="account" />
+        <div class="posts-section">
+          <PostCard v-for="post in posts" :key="post.id" :post="post" />
+          
+          <div class="d-flex justify-content-between align-items-center my-3">
+            <button
+              v-if="previousPage"
+              @click="getPosts(previousPage)"
+              :disabled="isLoading"
+              class="btn btn-primary"
+            >
+              <i class="mdi mdi-arrow-left"></i>
+              Newer Posts
+            </button>
+
+            <button
+              v-if="nextPage"
+              @click="getPosts(nextPage)"
+              :disable="isLoading"
+              class="btn btn-primary ms-auto"
+            >
+              Older Posts
+              <i class="mdi mdi-arrow-right"></i>
+            </button>
+          </div>
+
+          <div v-if="isLoading" class="d-flex justify-content-center my-3">
+            <div class="spinner=border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
         </div>
       </div>
-      
+
       <div class="col-md-4">
-        <div class="ads-container">
-          <AdCard
-            v-for="ad in ads"
-            :key="ad.id"
-            :ad="ad"
-          />
+        <div class="sticky-top pt-3">
+          <AdCard v-for="ad in ads" :key="ad.id" :ad="ad" />
         </div>
       </div>
     </div>
@@ -60,17 +88,11 @@ onMounted(async () => {
 </template>
 
 <style scoped lang="scss">
-.posts-container {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem
+.posts-section {
+  margin-top: 2rem;
 }
 
-.ads-container {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  position: sticky;
-  top: 1rem;
+.sticky-top {
+  top: 80px;
 }
 </style>
