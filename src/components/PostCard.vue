@@ -1,4 +1,10 @@
 <script setup>
+defineProps({
+  post: {
+    type: Object,
+    required: true
+  }
+})
 </script>
 
 <template>
