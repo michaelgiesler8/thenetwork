@@ -16,7 +16,13 @@ const props = defineProps({
 
 const account = computed(() => AppState.account)
 const isCreator = computed(() => account.value?.id === props.post.creatorId)
-const timeAgo = computed(() => format(new Date(props.post.createdAt)))
+const timeAgo = computed(() => {
+  try {
+    return format(new Date(props.post.createdAt))
+  } catch {
+    return new Date(props.post.createdAt).toLocaleDateString()
+  }
+})
 
 
 const likeTooltip = computed(() => {
