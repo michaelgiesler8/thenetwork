@@ -16,7 +16,9 @@
     "axios": "1.7.4",
     "bootstrap": "5.3.3",
     "socket.io-client": "4.7.5",
-    "sweetalert2": "11.12.4",
+    "sweetalert2": "^11.6.13",
+    "timeago": "^1.6.7",
+    "timeago.js": "^4.0.2",
     "vue": "^3.4.37",
     "vue-router": "^4.4.3"
   },
