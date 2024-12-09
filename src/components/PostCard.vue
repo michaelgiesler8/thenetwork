@@ -4,7 +4,7 @@ import { AppState } from '../AppState.js'
 import { postsService } from '../services/PostsService.js'
 import Pop from '../utils/Pop.js'
 import { router } from '../router.js'
-import { AuthService } from '../services/AuthService.js'
+import { format } from 'timeago.js'
 
 const props = defineProps({
   post: {
@@ -15,7 +15,13 @@ const props = defineProps({
 
 const account = computed(() => AppState.account)
 const isCreator = computed(() => account.value?.id === props.post.creatorId)
+const timeAgo = computed(() => format(new Date(props.post.createdAt)))
 
+
+const likeTooltip = computed(() => {
+  if (!props.post.likes.length) return 'Be the first to like this!'
+  return props.post.likes.map(l => l.name).join(', ')
+})
 
 async function likePost() {
   try {
@@ -53,15 +59,22 @@ function goToProfile() {
   <div class="card elevation-2 mb-3">
     <div class="card-header d-flex align-items-center justify-content-between">
       <div @click="goToProfile" class="d-flex align-items-center gap-2 selectable">
-        <img :src="post.creator.picture" :alt="post.creator.name" class="rounded-circle" height="40">
+        <img 
+          :src="post.creator.picture" 
+          :alt="post.creator.name" 
+          class="profile-picture rounded-circle"
+        >
         <div>
           <p class="mb-0 fw-bold">{{ post.creator.name }}</p>
-          <p class="mb-0 text-muted">{{ new Date(post.createdAt).toLocaleDateString() }}</p>
+          <p class="mb-0 text-muted small">{{ timeAgo }}</p>
         </div>
       </div>
 
       <div v-if="isCreator" class="dropdown">
-        <button class="btn btn-link" data-bs-toggle="dropdown">
+        <button 
+          class="btn btn-link" 
+          data-bs-toggle="dropdown"
+        >
           <i class="mdi mdi-dots-vertical"></i>
         </button>
         <div class="dropdown-menu dropdown-menu-end">
@@ -75,7 +88,12 @@ function goToProfile() {
 
     <div class="card-body">
       <p>{{ post.body }}</p>
-      <img v-if="post.imgUrl" :src="post.imgUrl" alt="" class="img-fluid rounded">
+      <img 
+        v-if="post.imgUrl" 
+        :src="post.imgUrl" 
+        :alt="post.body" 
+        class="img-fluid rounded">
+      >
     </div>
 
     <div class="card-footer">
@@ -83,6 +101,9 @@ function goToProfile() {
         @click="likePost"
         class="btn"
         :class="post.likes.find(l => l.id === account?.id) ? 'btn-primary' : 'btn-outline-primary'"
+        :title="likeTooltip"
+        data-bs-toggle="tooltip"
+        data-bs-placement="top"
       >
         <i class="mdi mdi-heart me-1"></i>
         {{ post.likes.length }}
