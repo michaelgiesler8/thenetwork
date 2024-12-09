@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue'
-import { AppState } from 'AppState.js'
+import { AppState } from '../AppState'
 import { postsService } from '../services/PostsService.js'
 import { profilesService } from '../services/ProfilesService.js'
 import Pop from '../utils/Pop.js'
