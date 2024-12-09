@@ -63,7 +63,7 @@ function goToProfile() {
         <img 
           :src="post.creator.picture" 
           :alt="post.creator.name" 
-          class="profile-picture rounded-circle"
+          class="profile-pic rounded-circle"
         >
         <div>
           <p class="mb-0 fw-bold">{{ post.creator.name }}</p>
