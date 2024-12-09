@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, computed, watchEffect } from 'vue'
+import { onMounted, computed, ref, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
 import { AppState } from '../AppState.js'
 import { profilesService } from '../services/ProfilesService.js'
