@@ -1,21 +1,35 @@
 <script setup>
-import { onMounted } from 'vue';
-import { useRoute } from 'vue-router';
-import { profilesService } from '../services/ProfilesService.js';
-import { AppState } from '../AppState.js';
-import { computed } from 'vue';
+import { onMounted, computed, watchEffect } from 'vue'
+import { useRoute } from 'vue-router'
+import { AppState } from '../AppState.js'
+import { profilesService } from '../services/ProfilesService.js'
+import { postsService } from '../services/PostsService.js'
+import Pop from '../utils/Pop.js'
+import ProfileDetails from '../components/ProfileDetails.vue'
+import PostCard from '../components/PostCard.vue'
+import PostForm from '../components/forms/PostForm.vue'
 
 const route = useRoute()
 const profile = computed(() => AppState.activeProfile)
+const posts = computed (() => AppState.posts)
+const account = computed(() => AppState.account)
 
-onMounted(async () => {
+async function getProfileDetails() {
   try {
-    await profilesService.getProfile('6582f5bc24ce93f904f77393')
-    console.log('Profile:', AppState.activeProfile)
+    const profileId = route.params.id
+    await profilesService.getProfile(profileId)
+    await postsService.getPostsByProfile(profileId)
   } catch (error) {
-    console.error('Error loading profile:', error)
+    Pop.error(error)
+  }
+}
+
+watchEffect(() => {
+  if (route.params.id) {
+    getProfileDetails()
   }
 })
+
 </script>
 
 <template>

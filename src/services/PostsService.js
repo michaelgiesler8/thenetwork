@@ -6,7 +6,8 @@ import Pop from "../utils/Pop.js"
 
 class PostsService {
   async getPosts(page = '') {
-    const res = await api.get('/api/posts' + page)
+    const url = page ? page: '/api/posts'
+    const res = await api.get(url)
     logger.log('[GOT POSTS]', res.data)
     AppState.posts = res.data.posts.map(p => new Post(p))
     AppState.nextPage = res.data.older
