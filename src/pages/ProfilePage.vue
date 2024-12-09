@@ -87,6 +87,12 @@ watchEffect(() => {
               <i class="mdi mdi-arrow-right"></i>
             </button>
           </div>
+
+          <div v-if="isLoading" class="d-flex justify-content-center my-3">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
         </div>
 
         <div class="col-md-4">
@@ -111,7 +117,6 @@ watchEffect(() => {
       </div>
     </div>
   </div>
-  <!-- FIXME add in page navigation functionality here, make sure you hit the correct endpoint for navigating to the second page of profile posts 'api/profiles/:profileId/posts?page=2' -->
 </template>
 
 <style scoped lang="scss">
