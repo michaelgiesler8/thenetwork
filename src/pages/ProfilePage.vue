@@ -46,6 +46,7 @@ async function getProfile() {
 watchEffect(() => {
   if (route.params.id) {
     getProfile()
+    getProfilePosts()
   }
 })
 
@@ -63,6 +64,28 @@ watchEffect(() => {
           <PostForm v-if="account?.id === profile?.id" />
           <div v-for="post in posts" :key="post.id">
             <PostCard :post="post" />
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center my-3">
+            <button
+              v-if="previousPage"
+              @click="getProfilePosts(previousPage)"
+              :disabled="isLoading"
+              class="btn btn-primary"
+            >
+              <i class="mdi mdi-arrow-left"></i>
+              Newer Posts
+            </button>
+
+            <button
+              v-if="nextPage"
+              @click="getProfilePosts(nextPage)"
+              :disabled="isLoading"
+              class="btn btn-primary ms-auto"
+            >
+              Older Posts
+              <i class="mdi mdi-arrow-right"></i>
+            </button>
           </div>
         </div>
 
