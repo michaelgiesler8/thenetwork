@@ -8,6 +8,7 @@ defineProps({
 </script>
 
 <template>
+  <!-- FIXME add https:// to the beginning of the linkURL here -->
   <a :href="ad.linkURL" target="_blank" class="text-decoration-none">
     <div class="card elevation-2 mb-3">
       <img :src="ad.tall" :alt="ad.title" class="ad-image">

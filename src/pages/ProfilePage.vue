@@ -42,7 +42,7 @@ watchEffect(() => {
       <div class="row mt-4">
         <div class="col-md-8">
           <PostForm v-if="account?.id === profile?.id" />
-          <div v-for="post in posts" :key="post-id">
+          <div v-for="post in posts" :key="post.id">
             <PostCard :post="post" />
           </div>
         </div>
@@ -69,6 +69,7 @@ watchEffect(() => {
       </div>
     </div>
   </div>
+  <!-- FIXME add in page navigation functionality here, make sure you hit the correct endpoint for navigating to the second page of profile posts 'api/profiles/:profileId/posts?page=2' -->
 </template>
 
 <style scoped lang="scss">

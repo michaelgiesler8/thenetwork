@@ -48,7 +48,7 @@ async function likePost() {
 async function deletePost() {
   try {
     if (!isCreator.value) return
-    const yes = await Pop.confirm('Delete Post?', 'Are you sure you want to remove this post?', 'warning')
+    const yes = await Pop.confirm('Delete Post?', 'Are you sure you want to remove this post?', 'Delete')
     if (!yes) { return }
     await postsService.removePost(props.post.id)
   } catch (error) {
@@ -100,7 +100,7 @@ function goToProfile() {
         :src="post.imgUrl" 
         :alt="post.body" 
         class="img-fluid rounded">
-      >
+      
     </div>
 
     <div class="card-footer">
