@@ -62,7 +62,7 @@ onMounted(async () => {
             <button
               v-if="nextPage"
               @click="getPosts(nextPage)"
-              :disable="isLoading"
+              :disabled="isLoading"
               class="btn btn-primary ms-auto"
             >
               Older Posts
@@ -71,7 +71,7 @@ onMounted(async () => {
           </div>
 
           <div v-if="isLoading" class="d-flex justify-content-center my-3">
-            <div class="spinner=border text-primary" role="status">
+            <div class="spinner-border text-primary" role="status">
               <span class="visually-hidden">Loading...</span>
             </div>
           </div>

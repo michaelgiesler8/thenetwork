@@ -5,6 +5,7 @@ import { postsService } from '../services/PostsService.js'
 import Pop from '../utils/Pop.js'
 import { router } from '../router.js'
 import { format } from 'timeago.js'
+import { AuthService } from '../services/AuthService';
 
 const props = defineProps({
   post: {
@@ -117,7 +118,17 @@ function goToProfile() {
   height: 40px;
   width: 40px;
   object-fit: cover;
+  border-radius: 50%;
 }
+
+.card-header {
+  padding: 1rem;
+
+  .profile-picture {
+    margin-right: 0.5rem;
+  }
+}
+
 
 .card {
   transition: all 0.2s ease;
