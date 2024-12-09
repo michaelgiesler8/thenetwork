@@ -13,12 +13,31 @@ const route = useRoute()
 const profile = computed(() => AppState.activeProfile)
 const posts = computed (() => AppState.posts)
 const account = computed(() => AppState.account)
+const nextPage = computed(() => AppState.nextPage)
+const previousPage = computed(() => AppState.previousPage)
+const isLoading = ref(false)
 
-async function getProfileDetails() {
+
+async function getProfilePosts(url = null) {
+  try {
+    isLoading.value = true
+    const profileId = route.params.id
+    if (!url) {
+      await postsService.getPostsByProfile(profileId)
+    } else {
+      await postsService.getPosts(url)
+    }
+  } catch (error) {
+    Pop.error(error)
+  } finally {
+    isLoading.value = false
+  }
+}
+
+async function getProfile() {
   try {
     const profileId = route.params.id
     await profilesService.getProfile(profileId)
-    await postsService.getPostsByProfile(profileId)
   } catch (error) {
     Pop.error(error)
   }
@@ -26,7 +45,7 @@ async function getProfileDetails() {
 
 watchEffect(() => {
   if (route.params.id) {
-    getProfileDetails()
+    getProfile()
   }
 })
 
