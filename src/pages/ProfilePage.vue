@@ -33,12 +33,41 @@ watchEffect(() => {
 </script>
 
 <template>
-  <div class="container">
-    <div v-if="profile">
-      <p>Profile loaded:</p>
-      <pre>{{  profile }}</pre>
+  <div class="container-fluid">
+    <div v-if="profile" class="row">
+      <div class="col-12">
+        <ProfileDetails :profile="profile" />
+      </div>
+
+      <div class="row mt-4">
+        <div class="col-md-8">
+          <PostForm v-if="account?.id === profile?.id" />
+          <div v-for="post in posts" :key="post-id">
+            <PostCard :post="post" />
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-body">
+              <h5>Links🔗</h5>
+              <div v-if="profile.github" class="d-flex align-items-center gap-2 mb-2">
+                <i class="mdi mdi-github"></i>
+                <a :href="profile.github" target="_blank">Github</a>
+              </div>
+              <div v-if="profile.linkedin" class="d-flex align-items-center gap-2 mb-2">
+                <i class="mdi mdi-linkedin"></i>
+                <a :href="profile.linkedin" target="_blank">LinkedIn</a>
+              </div>
+              <div v-if="profile.resume" class="d-flex align-items-center gap-2">
+                <i class="mdi mdi-file-document"></i>
+                <a :href="profile.resume" target="_blank">resume</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <p v-else>No profile loaded.</p>
   </div>
 </template>
 
