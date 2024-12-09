@@ -124,7 +124,7 @@ function goToProfile() {
 .card-header {
   padding: 1rem;
 
-  .profile-picture {
+  .profile-pic {
     margin-right: 0.5rem;
   }
 }
